@@ -103,9 +103,10 @@ public class Controller extends HttpServlet {
 				doConnection();
 				try {
 					String[] emails = data.split("\n");
+					System.out.println(emails[0]);
 					doConnection();
-					String query = "INSERT INTO tbl_group_details (Email_Id, Grp) SELECT * FROM"
-							+ " (SELECT ?, ?) AS tmp WHERE NOT EXISTS "
+					String query = "INSERT INTO tbl_group_details (Email_Id, Grp, Batch) SELECT * FROM"
+							+ " (SELECT ?, ?, ?) AS tmp WHERE NOT EXISTS "
 							+ "(SELECT Email_Id FROM tbl_group_details WHERE Email_Id = ?) LIMIT 1;";
 					// String query2 = "INSERT INTO tbl_group_details values(?,?)";
 					con.setAutoCommit(false);
@@ -116,7 +117,8 @@ public class Controller extends HttpServlet {
 						if (str.contains("@ahduni.edu.in")) {
 							ps.setString(1, str);
 							ps.setString(2, group);
-							ps.setString(3, str);
+							ps.setString(3, "Batch1");   //Set the batch here
+							ps.setString(4, str);
 							ps.addBatch();
 						} else {
 							rejectedEmails.append(str + "\n");
@@ -125,7 +127,7 @@ public class Controller extends HttpServlet {
 					if (ps.executeBatch().length > 0) {
 						if (rejectedEmails.length() == 0) {
 							response.setContentType("text/plain");
-							response.getWriter().write("Inserted");
+							response.getWriter().write("Inserted.....");
 						}else {
 							response.setContentType("text/plain");
 							response.getWriter().write("Inserted except following email ID(s):\n"+rejectedEmails.toString());

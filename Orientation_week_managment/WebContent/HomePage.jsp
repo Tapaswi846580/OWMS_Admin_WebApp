@@ -127,7 +127,6 @@ $(document).ready(function(){
 <body id="page-top">
 <%
 	String userId = (String) request.getAttribute("user");
-	System.out.println(userId);
 	if(userId == null){
 		response.getWriter().println("<script> window.location.href = \"Login.jsp\" </script>");
 	}
